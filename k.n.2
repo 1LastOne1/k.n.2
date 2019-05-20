@@ -1,0 +1,152 @@
+#include <iostream>
+#include <cstring>
+#include <string>
+
+
+using std::cout;
+using std::endl;
+using std::string;
+using std::cin;
+ 
+                                                           
+class sotrudnik                                                   
+{      
+	private:
+		char name [70] ;
+		int stash;
+		int neyavka;
+		
+	public:
+		int show_stash () {return (stash);};
+		int show_neyavka () {return (neyavka);};
+		virtual void zarplata()=0;       
+		sotrudnik ();
+		sotrudnik (char n[70], int st, int ne)
+		   {
+		   	  strncpy(name, n, 69);
+		   	  stash=st;
+		   	  neyavka=ne; 	
+		   };
+		
+		 ~sotrudnik();                                 
+	
+			
+};
+
+
+
+class otdel_kadrov: public sotrudnik                   
+{
+	private:
+		int otk_zp;
+		class info_pretendenty                               // вложенный класс
+		{
+			private:	
+		        string vakansiy;
+            string FIO ;
+		        char kategoriy [1];
+		        int stash_;
+		    public:
+			     info_pretendenty();
+			     info_pretendenty(string *f, string *v, char* kat, int st);
+				 void show (info_pretendenty *i_p) 
+				    {
+				    	 cout<< "Имя: " << FIO << endl;
+              cout<< "Информация о претендете:" << endl;
+				    	cout << "Квалификация" << kategoriy[0] << endl;
+				    	cout<< "Вакансия" << vakansiy << endl;
+				    	cout << "Опыт работы"  << stash_ << endl;
+					}
+		
+		 void spisok (int size)
+		  {
+		  	info_pretendenty ip [size];
+		  	for (int i=0; i<size; i++)
+		  	    {
+		  	      cin>> ip[i].FIO ;
+		          cin>> ip[i].vakansiy;
+		          cin>> ip[i].kategoriy [1];
+		          cin>> ip[i].stash_;
+				};
+		  };
+		};
+	
+	public:
+		otdel_kadrov();
+		~otdel_kadrov();
+		virtual int zarplatar()
+		     {
+		     	if (show_opyt()>=4 && show_progyly()==0)
+		     	   {
+		     	   	otk_zp=19000;
+				   } 
+				  else { otk_zp=15000; } 
+				  
+				  return otk_zp;
+              };
+};
+
+class manager: public sotrudnik                                            
+{
+	private:
+		int manager_zp;
+		int size_produc;		
+	public:
+		manager ();
+		~manager();
+		virtual int zarplatar()
+		     {
+		     	if (show_stash()>=4 && show_neyavka()==0)
+		     	   {
+		     	   	manager_zp=19000;
+				   } 
+				  else { manager_zp=15000; } 
+				  
+				  return manager_zp;
+			 };
+		void info()
+		     
+class nachalnik:public manager, public otdel_kadrov                                    
+{
+	private:
+		int nach_zp;
+	public:
+		virtual int zarplatar()
+		     {
+		     	if (sotrudnik::show_stash()>=4 && sotrudnik::show_neyavka()==0)
+		     	   {
+		     	   	nach_zp=25000;
+				   } 
+				  else { nach_zp=20000; } 
+				  
+				  return nach_zp;
+			 };
+			 
+		void otchet ()
+		    {
+		    	cout << "Продукция:" << endl;
+		    	info() ;
+			};	 
+
+	
+	
+};
+
+
+int main() 
+{
+	 setlocale(LC_ALL, "rus");
+	 
+	 nachalnik pr;
+	 pr.otchet();
+	 
+	 manager mn('Alexandr', 5, 5);
+	 mn.info;
+         mn.show_stash();
+         mn.show_neyavka();
+         cout<< " Зарплата менеджера << mn.zarplatar();
+	 
+	 otdel_kadrov spk;
+	 
+	return 0;
+}
